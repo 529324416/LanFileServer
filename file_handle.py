@@ -45,25 +45,20 @@ class Folder:
         self.name = os.path.basename(path_full)
         self.path_local = path_local
         self.path_full = path_full
-        self.__files, self.__folders = [], []
-        self.__is_invoked = False
     
     def invoke(self) -> tuple:
         '''Invoke the folder to get files and folders in it'''
 
-        if self.__is_invoked:
-            return self.__files, self.__folders
-
-        self.__is_invoked = True
         objects = os.listdir(self.path_full)
+        files, folders = [], []
         for obj in objects:
             filepath = os.path.join(self.path_full, obj)
             local = os.path.join(self.path_local, obj)
             if os.path.isfile(filepath):
-                self.__files.append(File(filepath))
+                files.append(File(filepath))
             else:
-                self.__folders.append(Folder(local, filepath))
-        return self.__files, self.__folders
+                folders.append(Folder(local, filepath))
+        return files, folders
     
     def contains_folder(self, folder_name):
         '''Check if the folder contains a folder'''
@@ -79,8 +74,6 @@ class Folder:
         '''Represent the folder'''
 
         return f"Folder: <{self.path_full}>"
-
-        
 
 
 class FileSystem:
@@ -170,11 +163,6 @@ class FileSystem:
         self.__path = str()
         self.__path_queue = list()
         self.__read_now()
-
-        
-
-    def get_files(self):
-        '''Get files in the current path'''
 
 
 if __name__ == '__main__':
